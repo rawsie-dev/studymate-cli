@@ -1,4 +1,5 @@
-from studymate_cli.latex import lint_latex, lint_latex_file
+import json
+from studymate_cli.latex import lint_latex, lint_latex_file, issues_to_json
 
 
 def test_lint_latex_duplicate_and_missing_ref():
@@ -80,3 +81,36 @@ See \parencite{known2026,unknown2026}.
 
     assert any("Citation 'unknown2026' has no matching bibliography entry" in message for message in messages)
     assert not any("Citation 'known2026'" in message for message in messages)
+
+def test_lint_latex_issues_to_json(tmp_path):
+    thesis = tmp_path / "thesis.tex"
+    
+    thesis.write_text(
+        "\\label{intro}\n"
+        "\\label{intro}\n"
+        "TODO: finish this section\n",
+        encoding="utf-8"
+    )
+
+    payload = json.loads(issues_to_json(lint_latex_file(thesis)))
+
+    assert payload == {
+        "findings": [
+            {
+                "line": 2,
+                "severity": "error",
+                "message": "Duplicate label 'intro' first defined on line 1."
+            },
+            {
+                "line": 3,
+                "severity": "warning",
+                "message": "TODO/FIXME/TBD left in document."
+            }
+        ],
+        "summary": {
+            "total_issues": 2,
+            "errors": 1,
+            "warnings": 1,
+            "status": "failed"
+        }
+    }

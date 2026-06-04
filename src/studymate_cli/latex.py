@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -146,3 +147,26 @@ def lint_latex_file(path: Path) -> list[LatexIssue]:
 
     issues.extend(lint_latex(text, bibliography_texts or None))
     return issues
+
+def issues_to_json(issues: list[LatexIssue]) -> str:
+    error_count = sum(1 for issue in issues if issue.severity == "error")
+    warning_count = sum(1 for issue in issues if issue.severity == "warning")
+    
+    output_data = {
+        "findings": [
+            {
+                "line": issue.line,
+                "severity": issue.severity,
+                "message": issue.message
+            }
+            for issue in issues
+        ],
+        "summary": {
+            "total_issues": len(issues),
+            "errors": error_count,
+            "warnings": warning_count,
+            "status": "failed" if error_count > 0 else "passed"
+        }
+    }
+    
+    return json.dumps(output_data, ensure_ascii=False, indent=2)

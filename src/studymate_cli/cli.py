@@ -24,6 +24,7 @@ from .srs import (
     load_review_items,
     review_item,
 )
+from .latex import lint_latex_file, issues_to_json
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -60,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
 
     latex = subparsers.add_parser("latex-lint", help="Lint a LaTeX file for common thesis/report issues.")
     latex.add_argument("input", type=Path)
+    latex.add_argument("--json", action="store_true")
 
     obsidian = subparsers.add_parser("obsidian", help="Work with an Obsidian vault.")
     obsidian_sub = obsidian.add_subparsers(dest="obsidian_command", required=True)
@@ -138,6 +140,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "latex-lint":
         issues = lint_latex_file(args.input)
+        if args.json:
+            print(issues_to_json(issues))
+            return 1 if any(issue.severity == "error" for issue in issues) else 0
+        
         if not issues:
             print("No LaTeX issues found.")
             return 0
