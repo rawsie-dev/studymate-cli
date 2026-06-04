@@ -18,6 +18,10 @@ _Q_RE = re.compile(r"^\s*(?:[-*]\s*)?Q(?:uestion)?\s*:\s*(.+?)\s*$", re.IGNORECA
 _A_RE = re.compile(r"^\s*(?:[-*]\s*)?A(?:nswer)?\s*:\s*(.+?)\s*$", re.IGNORECASE)
 
 
+def _normalize_anki_field(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip()
+
+
 def parse_flashcards(markdown: str) -> list[Flashcard]:
     """Extract simple Q/A flashcards from Markdown text."""
     cards: list[Flashcard] = []
@@ -48,6 +52,23 @@ def export_cards(cards: list[Flashcard], output: Path, fmt: str) -> None:
             json.dumps([asdict(card) for card in cards], ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+        return
+
+    if fmt == "anki":
+        with output.open("w", encoding="utf-8", newline="") as handle:
+            handle.write("#separator:tab\n")
+            handle.write("#html:false\n")
+            handle.write("#notetype:Basic\n")
+            handle.write("#deck:StudyMate\n")
+            handle.write("#tags:studymate\n")
+            writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
+            for card in cards:
+                writer.writerow(
+                    [
+                        _normalize_anki_field(card.question),
+                        _normalize_anki_field(card.answer),
+                    ]
+                )
         return
 
     if fmt == "csv":

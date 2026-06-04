@@ -50,6 +50,7 @@ Run:
 ```bash
 studymate flashcards examples/notes.md --output flashcards.csv --format csv
 studymate flashcards examples/notes.md --output flashcards.json --format json
+studymate flashcards examples/notes.md --output flashcards.tsv --format anki
 ```
 
 ### Manage deadlines
@@ -58,6 +59,7 @@ studymate flashcards examples/notes.md --output flashcards.json --format json
 studymate deadlines add "Linear algebra exam" --date 2026-06-20 --course "Math"
 studymate deadlines list
 studymate deadlines export --output deadlines.json
+studymate deadlines export --format ics --output deadlines.ics
 ```
 
 ### Check links
@@ -65,6 +67,21 @@ studymate deadlines export --output deadlines.json
 ```bash
 studymate linkcheck thesis.md
 studymate linkcheck thesis.tex --json
+```
+
+### Scan an Obsidian vault
+
+```bash
+studymate obsidian scan ~/NotesVault
+studymate obsidian scan ~/NotesVault --json
+```
+
+### Schedule spaced repetition reviews
+
+```bash
+studymate srs add "What is active recall?"
+studymate srs due
+studymate srs review ITEM_ID --rating good
 ```
 
 ### Lint LaTeX
