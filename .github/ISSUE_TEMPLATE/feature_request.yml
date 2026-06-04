@@ -1,0 +1,47 @@
+name: Feature request
+description: Suggest a new workflow, rule, export, or integration.
+title: "[enhancement] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What student workflow or academic text problem should this solve?
+      placeholder: Students need to ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the command, rule, output, or behavior you want.
+      placeholder: Add `studymate ...` so that ...
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - check engine
+        - rule
+        - CI integration
+        - export
+        - note pipeline
+        - spaced repetition
+        - documentation
+        - other
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What must be true for this to be done?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional. Mention existing tools or workflows and why they do not cover this.

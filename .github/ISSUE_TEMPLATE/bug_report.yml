@@ -1,0 +1,58 @@
+name: Bug report
+description: Report something that is broken or surprising.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve StudyMate CLI. Please include a small reproducible example when possible.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+      placeholder: I ran `studymate ...` and expected ..., but got ...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include commands and a minimal Markdown/LaTeX example if relevant.
+      placeholder: |
+        1. Create file ...
+        2. Run command ...
+        3. See output ...
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Actual output
+      description: Paste terminal output, JSON output, or traceback.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: StudyMate version or commit
+      placeholder: "0.1.0 or git SHA"
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "Python 3.12.0"
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - flashcards
+        - deadlines
+        - linkcheck
+        - latex-lint
+        - obsidian
+        - srs
+        - packaging/install
+        - documentation
+        - other
